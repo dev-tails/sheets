@@ -1,0 +1,12 @@
+{
+  "name": "@engramhq/sheets",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --outfile=static/js/sheets.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.12"
+  }
+}
