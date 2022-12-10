@@ -14,16 +14,20 @@ const sheet = {
       1: "Test Name",
       2: "2022-10-30",
       3: "Some notes",
-      4: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/SMPTE_Color_Bars.svg/1200px-SMPTE_Color_Bars.svg.png"
     }
   ]
 }
 
 const table = document.createElement("table");
+table.style.overflowX = "auto";
+table.style.display = "block";
+
+
 const row = document.createElement("tr");
 
 for (const column of sheet.dataTypes) {
   const columnElement = document.createElement("td");
+  columnElement.style.width = "200px";
 
   columnElement.innerText = column.name;
 
@@ -52,6 +56,9 @@ for (const dataRow of sheet.data) {
     }
 
     const colEl = document.createElement("td");
+    colEl.style.minWidth = "200px"
+    colEl.style.maxWidth = "200px"
+
     if (dataType.type === "image") {
       colEl.append(ColImage(dataRow[field]));
       colEl.addEventListener("dragover", (e) => {
