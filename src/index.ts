@@ -30,6 +30,8 @@ async function run() {
 
   for (const column of sheet.dataTypes) {
     const columnElement = document.createElement("td");
+    
+    columnElement.style.borderBottom = "1px solid black";
     columnElement.style.width = "200px";
 
     columnElement.innerText = column.name;
@@ -47,21 +49,27 @@ async function run() {
     return image;
   }
 
-  for (const dataRow of rows) {
+  for (let i = 0; i < 1000; i++) {
+    const dataRow = rows[i];
+    
     const rowEl = document.createElement("tr");
+    rowEl.style.borderBottom = "1px solid black";
 
-    for (let i = 0; i < sheet.dataTypes.length; i++) {
-      const dataType = sheet.dataTypes[i];
+    for (let j = 0; j < sheet.dataTypes.length; j++) {
+      const dataType = sheet.dataTypes[j];
       if (!dataType) {
         continue;
       }
 
       const colEl = document.createElement("td");
+      colEl.style.borderBottom = "1px solid black";
       colEl.style.minWidth = "200px";
       colEl.style.maxWidth = "200px";
 
       if (dataType.type === "image") {
-        colEl.append(ColImage(dataRow.columns[i]));
+        if (dataRow?.columns) {
+          colEl.append(ColImage(dataRow?.columns[j]));
+        }
         colEl.addEventListener("dragover", (e) => {
           e.preventDefault();
         });
@@ -103,7 +111,7 @@ async function run() {
       } else {
         colEl.contentEditable = "true";
         colEl.style.outline = "none";
-        colEl.innerHTML = dataRow.columns[i];
+        colEl.innerHTML = dataRow?.columns[j] || "";
       }
 
       rowEl.append(colEl);
