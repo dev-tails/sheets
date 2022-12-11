@@ -35,7 +35,7 @@ export function getDb() {
         for (let i = 0; i < 1000; i++) {
           await addRow({ columns: []});
         }
-      } else if (oldVersion == 1) {
+      } else if (newVersion && newVersion > 1) {
         db.createObjectStore("sheets", { autoIncrement: true });
         await addSheet({
           columns: [
