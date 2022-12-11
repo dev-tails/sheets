@@ -31,12 +31,8 @@ export function getDb() {
     upgrade: async (db, oldVersion, newVersion) => {
       if (oldVersion < 1) {
         db.createObjectStore("rows", { autoIncrement: true });
-
-        for (let i = 0; i < 1000; i++) {
-          await addRow({ columns: []});
-        }
-      } else if (newVersion && newVersion > 1) {
         db.createObjectStore("sheets", { autoIncrement: true });
+
         await addSheet({
           columns: [
             {
@@ -49,6 +45,10 @@ export function getDb() {
             }
           ]
         })
+
+        for (let i = 0; i < 1000; i++) {
+          await addRow({ columns: []});
+        }
       }
     },
   });
