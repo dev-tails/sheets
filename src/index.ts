@@ -1,4 +1,4 @@
-import { getAllRows, getSheet, updateRow } from "./db";
+import { getAllRows, getSheet, updateRow, updateSheet } from "./db";
 import { ImageModal } from "./ImageModal";
 
 async function run() {
@@ -37,16 +37,19 @@ async function run() {
   tdAddColumn.appendChild(btnAdd);
   btnAdd.addEventListener("click", () => {
     const title = prompt("title") || "";
-    const type = prompt("type", "text");
+    const type = (prompt("type", "text") || "text") as "text" | "image";
 
-    const columnElement = document.createElement("td");
+    updateSheet(1, {
+      columns: [
+        ...sheet.columns,
+        {
+          type,
+          title
+        }
+      ]
+    })
 
-    columnElement.style.borderBottom = "1px solid black";
-    columnElement.style.width = "200px";
-
-    columnElement.innerText = title;
-
-    row.insertBefore(columnElement, tdAddColumn);
+    window.location.reload();
   });
 
   row.append(tdAddColumn);
