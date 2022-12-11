@@ -1,14 +1,7 @@
-import { addRow, getAllRows, updateRow } from "./db";
+import { getAllRows, updateRow } from "./db";
+import { ImageModal } from "./ImageModal";
 
 async function run() {
-  // const db = await addRow({
-  //   columns: [
-  //     "Test",
-  //     "https://medlineplus.gov/images/Xray_share.jpg",
-  //   ],
-  // });
-  // return;
-
   const rows = await getAllRows();
 
   const root = document.createElement("div");
@@ -46,6 +39,11 @@ async function run() {
     image.style.height = "100px";
     image.style.objectFit = "contain";
     image.src = imgSrc;
+
+    image.addEventListener("click", () => {
+      document.body.appendChild(ImageModal({img: imgSrc}));
+    })
+
     return image;
   }
 
