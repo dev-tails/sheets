@@ -30,7 +30,7 @@ async function run() {
 
   for (const column of sheet.dataTypes) {
     const columnElement = document.createElement("td");
-    
+
     columnElement.style.borderBottom = "1px solid black";
     columnElement.style.width = "200px";
 
@@ -51,7 +51,7 @@ async function run() {
 
   for (let i = 0; i < 1000; i++) {
     const dataRow = rows[i];
-    
+
     const rowEl = document.createElement("tr");
     rowEl.style.borderBottom = "1px solid black";
 
@@ -70,6 +70,7 @@ async function run() {
         if (dataRow?.columns[j]) {
           colEl.append(ColImage(dataRow?.columns[j]));
         }
+
         colEl.addEventListener("dragover", (e) => {
           e.preventDefault();
         });
@@ -81,46 +82,50 @@ async function run() {
 
           if (ev.dataTransfer.items) {
             // Use DataTransferItemList interface to access the file(s)
-            [...ev.dataTransfer.items].forEach((item, i) => {
+            [...ev.dataTransfer.items].forEach((item) => {
               // If dropped items aren't files, reject them
               if (item.kind === "file") {
                 const file = item.getAsFile();
                 if (file) {
                   const reader = new FileReader();
 
-                  reader.onload = function (e) {
+                  reader.onload = (e) => {
                     colEl.innerHTML = "";
                     colEl.append(ColImage(e.target?.result as string));
+
+                    setTimeout(async () => {
+                      const updatedColumns = [...dataRow.columns];
+                      updatedColumns[j] = e.target?.result as string;
+
+                      await updateRow(i + 1, {
+                        columns: updatedColumns,
+                      });
+                    }, 0);
                   };
 
                   reader.readAsDataURL(file);
                 }
-                console.log(`1 file[${i}].name = ${file?.name}`);
               }
-            });
-          } else {
-            // Use DataTransfer interface to access the file(s)
-            [...ev.dataTransfer.files].forEach((file, i) => {
-              console.log(`2 file[${i}].name = ${file.name}`);
             });
           }
         });
+
         colEl.addEventListener("click", () => {
-          console.log("click");
+          console.log("click", i);
         });
       } else {
         colEl.contentEditable = "true";
         colEl.style.outline = "none";
         colEl.innerText = dataRow?.columns[j] || "";
-        
+
         colEl.addEventListener("blur", async () => {
           const updatedColumns = [...dataRow.columns];
           updatedColumns[j] = colEl.innerText;
-          console.log(updatedColumns, String(i + 1))
+
           await updateRow(i + 1, {
-            columns: updatedColumns
-          })
-        })
+            columns: updatedColumns,
+          });
+        });
       }
 
       rowEl.append(colEl);
