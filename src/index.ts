@@ -1,4 +1,4 @@
-import { addRow, getAllRows } from "./db";
+import { addRow, getAllRows, updateRow } from "./db";
 
 async function run() {
   // const db = await addRow({
@@ -67,7 +67,7 @@ async function run() {
       colEl.style.maxWidth = "200px";
 
       if (dataType.type === "image") {
-        if (dataRow?.columns) {
+        if (dataRow?.columns[j]) {
           colEl.append(ColImage(dataRow?.columns[j]));
         }
         colEl.addEventListener("dragover", (e) => {
@@ -111,7 +111,16 @@ async function run() {
       } else {
         colEl.contentEditable = "true";
         colEl.style.outline = "none";
-        colEl.innerHTML = dataRow?.columns[j] || "";
+        colEl.innerText = dataRow?.columns[j] || "";
+        
+        colEl.addEventListener("blur", async () => {
+          const updatedColumns = [...dataRow.columns];
+          updatedColumns[j] = colEl.innerText;
+          console.log(updatedColumns, String(i + 1))
+          await updateRow(i + 1, {
+            columns: updatedColumns
+          })
+        })
       }
 
       rowEl.append(colEl);
