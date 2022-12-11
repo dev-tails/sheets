@@ -1,4 +1,4 @@
-import { getAllRows, updateRow } from "./db";
+import { getAllRows, getSheet, updateRow } from "./db";
 import { ImageModal } from "./ImageModal";
 
 async function run() {
@@ -8,12 +8,7 @@ async function run() {
 
   document.body.append(root);
 
-  const sheet = {
-    dataTypes: [
-      { name: "Name", type: "text" },
-      { name: "Image", type: "image" },
-    ],
-  };
+  const sheet = await getSheet();
 
   const table = document.createElement("table");
   table.style.overflowX = "auto";
@@ -21,16 +16,41 @@ async function run() {
 
   const row = document.createElement("tr");
 
-  for (const column of sheet.dataTypes) {
+  for (const column of sheet.columns) {
     const columnElement = document.createElement("td");
 
     columnElement.style.borderBottom = "1px solid black";
     columnElement.style.width = "200px";
 
-    columnElement.innerText = column.name;
+    columnElement.innerText = column.title;
 
     row.append(columnElement);
   }
+
+  const tdAddColumn = document.createElement("td");
+
+  tdAddColumn.style.borderBottom = "1px solid black";
+  tdAddColumn.style.width = "200px";
+
+  const btnAdd = document.createElement("button");
+  btnAdd.innerText = "+"
+  tdAddColumn.appendChild(btnAdd);
+  btnAdd.addEventListener("click", () => {
+    const title = prompt("title") || "";
+    const type = prompt("type", "text");
+
+    const columnElement = document.createElement("td");
+
+    columnElement.style.borderBottom = "1px solid black";
+    columnElement.style.width = "200px";
+
+    columnElement.innerText = title;
+
+    row.insertBefore(columnElement, tdAddColumn);
+  });
+
+  row.append(tdAddColumn);
+
   table.append(row);
 
   function ColImage(imgSrc: string) {
@@ -53,8 +73,8 @@ async function run() {
     const rowEl = document.createElement("tr");
     rowEl.style.borderBottom = "1px solid black";
 
-    for (let j = 0; j < sheet.dataTypes.length; j++) {
-      const dataType = sheet.dataTypes[j];
+    for (let j = 0; j < sheet.columns.length; j++) {
+      const dataType = sheet.columns[j];
       if (!dataType) {
         continue;
       }
