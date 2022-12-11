@@ -14,6 +14,7 @@ const sheet = {
       1: "Test Name",
       2: "2022-10-30",
       3: "Some notes",
+      4: "https://medlineplus.gov/images/Xray_share.jpg"
     }
   ]
 }
@@ -37,8 +38,8 @@ table.append(row);
 
 function ColImage(imgSrc: string) {
   const image = document.createElement("img");
-  image.style.width = '300px'
-  image.style.height = '300px'
+  image.style.width = '100px'
+  image.style.height = '100px'
   image.style.objectFit = 'contain'
   image.src = imgSrc;
   return image
